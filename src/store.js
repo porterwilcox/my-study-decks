@@ -1,6 +1,6 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
-import fireApp from '../utils/firebase-init.js'
+import fireApp from './utils/firebase-init.js'
 import Swal from 'sweetalert2'
 
 const _db = fireApp.firestore
