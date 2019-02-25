@@ -21,8 +21,9 @@ export default {
    props: [],
    data() {
       return {
-         loginCreds: {
+         creds: {
             email: '',
+            username: '',
             password: ''
          }
       }
@@ -33,48 +34,84 @@ export default {
       ])
    },
    methods: {
-      login(){
+      register(){
          Swal.mixin({
-         input: 'text',
          confirmButtonText: 'Next',
          showCancelButton: true,
-         progressSteps: ['<i class="far fa-envelope"></i>', '<i class="fas fa-lock"></i>']
+         progressSteps: ['<i class="fas fa-envelope"></i>', '<i class="fas fa-user"></i>' , '<i class="fas fa-lock"></i>']
          }).queue([
          {
-            title: 'Sign In',
+            title: 'Sign Up',
             input: 'email',
             inputPlaceholder: 'Enter your email address',
             preConfirm: (email) => {
                return this.IsUniqueEmail(email)
                   .then(() => {
-                     this.loginCreds.email = email
+                     this.creds.email = email
                      resolve()
                   })
                   .catch(e => Swal.showValidationMessage(e.message))
             }
          },
          {
-            title: 'Sign In',
-            html: 
-            '<input id="pw1" autofocus class="swal2-input" type="password" pattern=".{8,}" placeholder="Enter a password">', 
-            // '<input id="pw2" class="swal2-input" type="password" placeholder="Confirm password">',
-            input: 'password',
-            inputPlaceholder: 'Confirm password',
-            preConfirm: (password) => {
-               if (document.getElementById('pw1').value != password) {
-                  Swal.showValidationMessage("Passwords don't match.")
+            title: 'Sign Up',
+            input: 'text',
+            inputPlaceholder: 'Enter a username',
+            preConfirm: (text) => {
+               if(text.length < 2) return Swal.showValidationMessage("Username must have at least 2 characters.")
+               if (text.match(/\W/)) return Swal.showValidationMessage("Username can only contain alpha-numeric characters.")
+               this.creds.username = text
                }
-               this.loginCreds.password = password
-               this.$store.dispatch('login', this.loginCreds)
-               this.loginCreds = {
+         },
+         {
+            title: 'Sign Up',
+            html: 
+            '<input id="pw1" autofocus class="swal2-input" type="password" pattern=".{8,}" placeholder="Enter a password">' +
+            '<input id="pw2" class="swal2-input" type="password" placeholder="Confirm password">',
+            preConfirm: (password) => {
+               if (document.getElementById('pw1').value != document.getElementById('pw2').value) {
+                  return Swal.showValidationMessage("Passwords don't match.")
+               }
+               this.creds.password = document.getElementById('pw1').value
+               this.$store.dispatch('register', this.creds)
+               this.creds = {
                   email: '',
+                  username: '',
                   password: ''
                }
             } 
          }
          ])
       },
-      register(){}
+      login(){
+          Swal.mixin({
+         confirmButtonText: 'Next',
+         showCancelButton: true,
+         progressSteps: ['<i class="fas fa-envelope"></i>', '<i class="fas fa-lock"></i>']
+         }).queue([
+         {
+            title: 'Sign In',
+            input: 'email',
+            inputPlaceholder: 'Enter your email address',
+            preConfirm: (email) => this.creds.email = email
+         },
+         {
+            title: 'Sign In',
+            input: 'password',
+            preConfirm: (password) => {
+               this.creds.password = password
+               return this.$store.dispatch('login', this.creds)
+                  .then(() => {
+                     this.creds = {
+                        email: '',
+                        password: ''
+                     }
+                  })
+                  .catch(e => Swal.showValidationMessage(e.message))
+            } 
+         }
+         ])
+      }
    },
    components: {}
 }

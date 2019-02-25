@@ -1,7 +1,8 @@
 import Vue from 'vue'
 import Vuex from 'vuex'
 import fireApp from './utils/firebase-init.js'
-import Swal from 'sweetalert2'
+import SwalConfigs from './utils/swal-configs.js'
+import { resolve } from 'url';
 
 const _db = fireApp.firestore
 const _auth = fireApp.auth
@@ -19,24 +20,34 @@ export default new Vuex.Store({
   },
   actions: {
     login({ commit }, payload) {
-      _auth.signInWithEmailAndPassword(payload.email, payload.password)
+      return _auth.signInWithEmailAndPassword(payload.email, payload.password)
         .then(res => {
           commit('setUser', res.user)
-          router.push({ name: 'home' })
+          SwalConfigs.toast('Welcome back, ' + res.user.displayName, '', 'success')          
+          return true
         })
-        .catch(e => console.error(e))
+        .catch(e => {
+          console.error(e)
+          throw new Error("Email and/or Password is incorrect.")
+        })
+    },
+    register({ dispatch }, payload) {
+      _auth.createUserWithEmailAndPassword(payload.email, payload.password)
+        .then(() => {
+          _auth.currentUser.updateProfile({ displayName: payload.username })
+          dispatch('validateEmail')
+        })
+    },
+    validateEmail({ }) {
+      _auth.currentUser.sendEmailVerification({
+        url: 'http://localhost:8080/'
+      })
+        .then(() => {
+          SwalConfigs.toast('Account Created!', 'Verification email has been sent.', 'success')
+        })
     },
     swalTest({}) {
-      Swal.fire({
-        title: "super cool",
-        text: "\nyou pressed the button",
-        showConfirmButton: false,
-        timer: 1500,
-        position: 'top-right',
-        type: 'success',
-        toast: true,
-        target: document.querySelector('#swal-target')
-      })
+      SwalConfigs.toast("Noice", "you pressed the button", "success")
     }
   },
   getters: {
