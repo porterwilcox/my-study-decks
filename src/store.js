@@ -19,7 +19,7 @@ export default new Vuex.Store({
   },
   actions: {
     login({ commit }, payload) {
-      _auth.createUserWithEmailAndPassword(payload.email, payload.password)
+      _auth.signInWithEmailAndPassword(payload.email, payload.password)
         .then(res => {
           commit('setUser', res.user)
           router.push({ name: 'home' })
@@ -37,6 +37,16 @@ export default new Vuex.Store({
         toast: true,
         target: document.querySelector('#swal-target')
       })
+    }
+  },
+  getters: {
+    IsUniqueEmail: () => (email) => {
+      return _auth.fetchSignInMethodsForEmail(email)
+        .then(res => {
+          console.log('this is the res', res)
+          if (res.length) throw new Error('This email is already in use.')
+          return true
+        })
     }
   }
 })

@@ -13,14 +13,25 @@
 </template>
 
 <script>
+import { mapGetters } from 'vuex'
 import Swal from 'sweetalert2'
+import { resolve } from 'q';
 export default {
    name: "navigation",
    props: [],
    data() {
-      return {}
+      return {
+         loginCreds: {
+            email: '',
+            password: ''
+         }
+      }
    },
-   computed: {},
+   computed: {
+      ...mapGetters([
+         'IsUniqueEmail'
+      ])
+   },
    methods: {
       login(){
          Swal.mixin({
@@ -30,9 +41,37 @@ export default {
          progressSteps: ['<i class="far fa-envelope"></i>', '<i class="fas fa-lock"></i>']
          }).queue([
          {
-            title: 'Email',
+            title: 'Sign In',
+            input: 'email',
+            inputPlaceholder: 'Enter your email address',
+            preConfirm: (email) => {
+               return this.IsUniqueEmail(email)
+                  .then(() => {
+                     this.loginCreds.email = email
+                     resolve()
+                  })
+                  .catch(e => Swal.showValidationMessage(e.message))
+            }
          },
-         'Password',
+         {
+            title: 'Sign In',
+            html: 
+            '<input id="pw1" autofocus class="swal2-input" type="password" pattern=".{8,}" placeholder="Enter a password">', 
+            // '<input id="pw2" class="swal2-input" type="password" placeholder="Confirm password">',
+            input: 'password',
+            inputPlaceholder: 'Confirm password',
+            preConfirm: (password) => {
+               if (document.getElementById('pw1').value != password) {
+                  Swal.showValidationMessage("Passwords don't match.")
+               }
+               this.loginCreds.password = password
+               this.$store.dispatch('login', this.loginCreds)
+               this.loginCreds = {
+                  email: '',
+                  password: ''
+               }
+            } 
+         }
          ])
       },
       register(){}
