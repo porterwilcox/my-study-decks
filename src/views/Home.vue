@@ -5,9 +5,7 @@
       <div id="swal-target" class="col-6 bg-secondary">
         <img class="card-img" alt="Vue logo" src="../assets/logo.png">
       </div>
-      <div class="col-6 bg-warning">
-        <button class="btn btn-info" @click="$store.dispatch('swalTest')">click</button>
-      </div>
+      <div class="col-6 bg-warning"></div>
     </div>
 
   </div>
