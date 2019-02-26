@@ -1,21 +1,20 @@
 <template>
    <div class="navigation row">
-      <div class="col-8 col-md-4 text-center">
+      <div class="col text-center">
           <h1>My Study Decks</h1>
       </div>
-      <div class="col d-flex justify-content-end align-items-center">
-         <div class="btn-group btn-group-sm" role="group">
+      <div class="col-auto d-flex justify-content-end align-items-center">
+         <div v-if="!user.uid" class="btn-group btn-group-sm" role="group">
             <button @click="login" class="btn btn-outline-secondary">Sign In</button>
             <button @click="register" class="btn btn-outline-primary">Sign Up</button>
          </div>
+         <button v-else @click="$store.dispatch('auth/logout')" class="btn btn-outline-primary">Logout</button>
       </div>
    </div>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
 import Swal from 'sweetalert2'
-import { resolve } from 'q';
 export default {
    name: "navigation",
    props: [],
@@ -29,9 +28,9 @@ export default {
       }
    },
    computed: {
-      ...mapGetters([
-         'IsUniqueEmail'
-      ])
+      user() {
+         return this.$store.getters.user
+      }
    },
    methods: {
       register(){
@@ -45,10 +44,9 @@ export default {
             input: 'email',
             inputPlaceholder: 'Enter your email address',
             preConfirm: (email) => {
-               return this.IsUniqueEmail(email)
+               return this.$store.getters["auth/IsUniqueEmail"](email)
                   .then(() => {
                      this.creds.email = email
-                     resolve()
                   })
                   .catch(e => Swal.showValidationMessage(e.message))
             }
@@ -73,7 +71,7 @@ export default {
                   return Swal.showValidationMessage("Passwords don't match.")
                }
                this.creds.password = document.getElementById('pw1').value
-               this.$store.dispatch('register', this.creds)
+               this.$store.dispatch('auth/register', this.creds)
                this.creds = {
                   email: '',
                   username: '',
@@ -100,7 +98,7 @@ export default {
             input: 'password',
             preConfirm: (password) => {
                this.creds.password = password
-               return this.$store.dispatch('login', this.creds)
+               return this.$store.dispatch('auth/login', this.creds)
                   .then(() => {
                      this.creds = {
                         email: '',
