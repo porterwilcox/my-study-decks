@@ -8,7 +8,13 @@
             <button @click="login" class="btn btn-outline-secondary">Sign In</button>
             <button @click="register" class="btn btn-outline-primary">Sign Up</button>
          </div>
-         <button v-else @click="$store.dispatch('auth/logout')" class="btn btn-outline-primary">Logout</button>
+         <i v-else @click="navCount++" :class="navCount % 2 ? 'far fa-times-circle text-white' : 'fas fa-bars text-warning'" class="fa-2x side-nav-btn action" aria-label="toggle menu" data-target=".side-nav" data-toggle="collapse"></i>
+         <div class="side-nav col-5 col-md-2 bg-main-color collapse">
+            <div class="d-flex flex-column h-100 w-100">
+               <button v-for="l in links" :class="$route.name == l.routeName ? 'disabled btn-primary' : 'btn-outline-primary'" class="btn mb-1" @click="$router.push({name: l.routeName})">{{l.name}}</button>
+               <button @click="logout" class="btn btn-outline-primary">Logout</button>
+            </div>
+         </div>
       </div>
    </div>
 </template>
@@ -24,7 +30,9 @@ export default {
             email: '',
             username: '',
             password: ''
-         }
+         },
+         navCount: 0,
+         links: [{name: "Home", routeName: "home"}, {name: "About", routeName: "about"}]
       }
    },
    computed: {
@@ -99,6 +107,7 @@ export default {
          {
             title: 'Sign In',
             input: 'password',
+            inputPlaceholder: 'Enter your password',
             preConfirm: (password) => {
                this.creds.password = password
                return this.$store.dispatch('auth/login', this.creds)
@@ -112,8 +121,32 @@ export default {
             } 
          }
          ])
+      },
+      logout() {
+         $('.collapse').collapse('hide');
+         this.$router.push({name: 'home'})
+         this.$store.dispatch('auth/logout')
       }
    },
    components: {}
 }
 </script>
+
+<style>
+.side-nav-btn {
+    position: fixed;
+    right: 1vw;
+    top: 1.5vh;
+    z-index: 2;
+}
+.side-nav {
+    position: fixed;
+    right: 0;
+    top: 0;
+    z-index: 1;
+    box-shadow: 0 0 100px 10px black;
+    padding-top: 20vh;
+    height: 100vh;
+    background: var(--warning);
+}
+</style>

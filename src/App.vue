@@ -5,5 +5,7 @@
 </template>
 
 <style>
-
+.action {
+  cursor: pointer;
+}
 </style>
