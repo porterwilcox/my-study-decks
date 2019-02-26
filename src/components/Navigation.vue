@@ -71,12 +71,15 @@ export default {
                   return Swal.showValidationMessage("Passwords don't match.")
                }
                this.creds.password = document.getElementById('pw1').value
-               this.$store.dispatch('auth/register', this.creds)
-               this.creds = {
-                  email: '',
-                  username: '',
-                  password: ''
-               }
+               return this.$store.dispatch('auth/register', this.creds)
+                  .then(() => {
+                     this.creds = {
+                        email: '',
+                        username: '',
+                        password: ''
+                     }
+                  })
+                  .catch(e => Swal.showValidationMessage(e.message))
             } 
          }
          ])
