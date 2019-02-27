@@ -14,13 +14,11 @@ export default {
         }
     },
     actions: {
-        authenticate({ commit }) {
-            _auth.onAuthStateChanged(user => {
-                if (!user || !user.displayName) return
-                commit('setUser', user)
-                SwalConfigs.toast('Welcome back, ' + user.displayName, '', 'success')
-                if (!user.emailVerified) setTimeout(() => SwalConfigs.toast("", "Verify your email address to unlock more features, including Deck Creation.", "info", 3000), 1000)
-            })
+        setUser({ commit }, user) {
+            if (!user || !user.displayName) return
+            commit('setUser', user)
+            SwalConfigs.toast('Welcome back, ' + user.displayName, '', 'success')
+            if (!user.emailVerified) setTimeout(() => SwalConfigs.toast("", "Verify your email address to unlock more features, including Deck Creation.", "info", 3000), 1000)
         },
         login({ commit }, payload) {
             return _auth.signInWithEmailAndPassword(payload.email, payload.password)

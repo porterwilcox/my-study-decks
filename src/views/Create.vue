@@ -1,7 +1,19 @@
 <template>
    <div class="create container-fluid">
         <navigation></navigation>
-        <h2>This is the create a deck page</h2>
+        <div class="row">
+           <div class="col-7">
+               <h2>Create a Deck:</h2>
+               <input v-model="activeCard.question" type="text">
+               <input v-model="activeCard.answer" type="text">
+           </div>
+           <div class="col-5">
+              <h2>Preview:</h2>
+              <div class="card bg-info">
+                 {{activeCard.question || "Prompt Here..."}}
+              </div>
+           </div>
+        </div>
    </div>
 </template>
 
@@ -11,7 +23,12 @@ export default {
    name: "create",
    props: [],
    data() {
-      return {}
+      return {
+         activeCard: {
+            question: '',
+            answer: ''
+         }
+      }
    },
    computed: {},
    methods: {},

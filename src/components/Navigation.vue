@@ -6,7 +6,7 @@
       <i @click="navCount++" :class="navCount % 2 ? 'far fa-times-circle text-white' : 'fas fa-bars text-warning'" class="fa-2x side-nav-btn action" aria-label="toggle menu" data-target=".side-nav" data-toggle="collapse"></i>
       <div class="side-nav col-5 col-md-2 bg-main-color collapse">
          <div class="d-flex flex-column h-100 w-100">
-            <button v-for="l in links" :class="$route.name == l.routeName ? 'disabled btn-primary' : 'btn-outline-primary'" class="btn mb-1" @click="$router.push({name: l.routeName})">{{l.name}}</button>
+            <button v-for="l in links" :key="l.name" :class="$route.name == l.routeName ? 'disabled btn-primary' : 'btn-outline-primary'" class="btn mb-1" @click="$router.push({name: l.routeName})">{{l.name}}</button>
             <div v-if="!user.uid" class="btn-group btn-group-sm" role="group">
                <button @click="login" class="btn btn-outline-primary">Sign In</button>
                <button @click="register" class="btn btn-outline-primary">Sign Up</button>

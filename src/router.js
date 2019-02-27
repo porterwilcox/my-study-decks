@@ -2,6 +2,9 @@ import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
 import Store from './store/index.js'
+import firebase from "./utils/firebase-init";
+
+const _auth = firebase.auth
 
 Vue.use(Router)
 
@@ -33,8 +36,8 @@ let publicRoutes = ["home", "about"]
 
 router.beforeEach((to, from, next) => {
   if (!publicRoutes.includes(to.name)) {
-    if (!Store.getters.User.uid) {
-      Store.dispatch('toast', {title: "Unauthorized", text: "Please, Sign In or Sign Up.", type: 'error', timer: 2000})
+    if (!_auth.currentUser || !_auth.currentUser.emailVerified) {
+      Store.dispatch('toast', {title: "Unauthorized", text: !_auth.currentUser ? "Please, Sign In or Sign Up." : "Please, Verify your Email Address.", type: 'error', timer: 2000})
       if(!publicRoutes.includes(from.name)) {
         return router.push({name: 'home'})
       }
