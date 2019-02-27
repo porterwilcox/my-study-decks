@@ -3,17 +3,15 @@
       <div class="col text-center">
           <h1>My Study Decks</h1>
       </div>
-      <div class="col-auto d-flex justify-content-end align-items-center">
-         <div v-if="!user.uid" class="btn-group btn-group-sm" role="group">
-            <button @click="login" class="btn btn-outline-secondary">Sign In</button>
-            <button @click="register" class="btn btn-outline-primary">Sign Up</button>
-         </div>
-         <i v-else @click="navCount++" :class="navCount % 2 ? 'far fa-times-circle text-white' : 'fas fa-bars text-warning'" class="fa-2x side-nav-btn action" aria-label="toggle menu" data-target=".side-nav" data-toggle="collapse"></i>
-         <div class="side-nav col-5 col-md-2 bg-main-color collapse">
-            <div class="d-flex flex-column h-100 w-100">
-               <button v-for="l in links" :class="$route.name == l.routeName ? 'disabled btn-primary' : 'btn-outline-primary'" class="btn mb-1" @click="$router.push({name: l.routeName})">{{l.name}}</button>
-               <button @click="logout" class="btn btn-outline-primary">Logout</button>
+      <i @click="navCount++" :class="navCount % 2 ? 'far fa-times-circle text-white' : 'fas fa-bars text-warning'" class="fa-2x side-nav-btn action" aria-label="toggle menu" data-target=".side-nav" data-toggle="collapse"></i>
+      <div class="side-nav col-5 col-md-2 bg-main-color collapse">
+         <div class="d-flex flex-column h-100 w-100">
+            <button v-for="l in links" :class="$route.name == l.routeName ? 'disabled btn-primary' : 'btn-outline-primary'" class="btn mb-1" @click="$router.push({name: l.routeName})">{{l.name}}</button>
+            <div v-if="!user.uid" class="btn-group btn-group-sm" role="group">
+               <button @click="login" class="btn btn-outline-primary">Sign In</button>
+               <button @click="register" class="btn btn-outline-primary">Sign Up</button>
             </div>
+            <button v-else @click="logout" class="btn btn-outline-primary">Logout</button>
          </div>
       </div>
    </div>
@@ -32,12 +30,14 @@ export default {
             password: ''
          },
          navCount: 0,
-         links: [{name: "Home", routeName: "home"}, {name: "About", routeName: "about"}]
+         links: [{name: "Home", routeName: "home"}, 
+         {name: "About", routeName: "about"},
+         {name: "Create a Deck", routeName: "create"}]
       }
    },
    computed: {
       user() {
-         return this.$store.getters.user
+         return this.$store.getters.User
       }
    },
    methods: {
@@ -81,6 +81,7 @@ export default {
                this.creds.password = document.getElementById('pw1').value
                return this.$store.dispatch('auth/register', this.creds)
                   .then(() => {
+                     $('.collapse').collapse('hide');
                      this.creds = {
                         email: '',
                         username: '',
@@ -112,6 +113,7 @@ export default {
                this.creds.password = password
                return this.$store.dispatch('auth/login', this.creds)
                   .then(() => {
+                     $('.collapse').collapse('hide');
                      this.creds = {
                         email: '',
                         password: ''

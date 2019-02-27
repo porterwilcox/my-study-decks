@@ -1,10 +1,11 @@
 import Vue from 'vue'
 import Router from 'vue-router'
 import Home from './views/Home.vue'
+import Store from './store/index.js'
 
 Vue.use(Router)
 
-export default new Router({
+let router = new Router({
   routes: [
     {
       path: '/',
@@ -14,12 +15,33 @@ export default new Router({
     {
       path: '/about',
       name: 'about',
-      // route level code-splitting
-      // this generates a separate chunk (about.[hash].js) for this route
-      // which is lazy-loaded when the route is visited.
       component: function () { 
-        return import(/* webpackChunkName: "about" */ './views/About.vue')
+        return import('./views/About.vue')
+      }
+    },
+    {
+      path: '/create',
+      name: 'create',
+      component: function () { 
+        return import('./views/Create.vue')
       }
     }
   ]
 })
+
+let publicRoutes = ["home", "about"]
+
+router.beforeEach((to, from, next) => {
+  if (!publicRoutes.includes(to.name)) {
+    if (!Store.getters.User.uid) {
+      Store.dispatch('toast', {title: "Unauthorized", text: "Please, Sign In or Sign Up.", type: 'error', timer: 2000})
+      if(!publicRoutes.includes(from.name)) {
+        return router.push({name: 'home'})
+      }
+      return next(false)
+    }
+  }
+  next()
+})
+
+export default router
