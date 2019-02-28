@@ -11,8 +11,12 @@ export default new Vuex.Store({
     auth,
     decks
   },
-  state: {},
-  mutations: {},
+  state: {
+    decks: []
+  },
+  mutations: {
+    ...decks.mutations
+  },
   actions: {
     toast({ }, payload) {
       SwalConfigs.toast(payload.title, payload.text, payload.type, payload.timer)

@@ -2,21 +2,31 @@
   <div class="home container-fluid">
     <navigation></navigation>
     <div class="row">
-      <div id="swal-target" class="col-6 bg-secondary">
-        <img class="card-img" alt="Vue logo" src="../assets/logo.png">
+      <div class="col-12 col-md-10 offset-md-1">
+        <div class="row">
+          <deck-card v-for="deck in decks" :key="deck.name" :deck="deck"></deck-card>
+        </div>
       </div>
-      <div class="col-6 bg-warning"></div>
     </div>
-
   </div>
 </template>
 
 <script>
 import Navigation from '@/components/Navigation.vue'
+import DeckCard from '@/components/DeckCard.vue'
 export default {
   name: 'home',
+  data() {
+    return {}
+  },
+  computed: {
+    decks() {
+      return this.$store.state.decks
+    }
+  },
   components: {
-    Navigation
+    Navigation,
+    DeckCard
   }
 }
 </script>

@@ -1,9 +1,9 @@
 <template>
-   <div class="navigation row">
+   <div class="navigation row mb-4">
       <div class="col text-center">
           <h1>My Study Decks</h1>
       </div>
-      <i @click="navCount++" :class="navCount % 2 ? 'far fa-times-circle text-white' : 'fas fa-bars text-warning'" class="fa-2x side-nav-btn action" aria-label="toggle menu" data-target=".side-nav" data-toggle="collapse"></i>
+      <i @click="navCount++" :class="navCount % 2 ? 'far fa-times-circle text-white' : 'fas fa-bars text-primary'" class="fa-2x side-nav-btn action" aria-label="toggle menu" data-target=".side-nav" data-toggle="collapse"></i>
       <div class="side-nav col-5 col-md-2 bg-main-color collapse">
          <div class="d-flex flex-column h-100 w-100">
             <button v-for="l in links" :key="l.name" :class="$route.name == l.routeName ? 'disabled btn-primary' : 'btn-outline-primary'" class="btn mb-1" @click="$router.push({name: l.routeName})">{{l.name}}</button>
@@ -135,6 +135,9 @@ export default {
 </script>
 
 <style>
+.navigation {
+   box-shadow: inset 0 -1px 60px var(--info), 0 -2px 10px 1px black;
+}
 .side-nav-btn {
     position: fixed;
     right: 1vw;
@@ -149,6 +152,6 @@ export default {
     box-shadow: 0 0 100px 10px black;
     padding-top: 20vh;
     height: 100vh;
-    background: var(--warning);
+    background: var(--info);
 }
 </style>

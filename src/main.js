@@ -15,6 +15,7 @@ _auth.onAuthStateChanged(user => {
     store,
     mounted() {
       this.$store.dispatch('auth/setUser', user)
+      this.$store.dispatch('getDecks')
     },
     render: function (h) { return h(App) }
   }).$mount('#app')

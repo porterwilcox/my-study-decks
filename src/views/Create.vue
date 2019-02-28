@@ -62,7 +62,7 @@ import Navigation from '@/components/Navigation.vue'
 export default {
    name: "create",
    beforeRouteLeave(to, from, next){
-      if(this.cards.length) {
+      if(this.cards.length && !this.published) {
          this.$store.dispatch('confirm', {title: "Are you sure you want to leave?", text: "You'll lose your unpublished deck.", type: "warning", confirm: "Stay with the Deck", cancel: "Leave Anyway"})
             .then(stay => next(stay ? false : true))
       } else next()
@@ -70,6 +70,7 @@ export default {
    props: [],
    data() {
       return {
+         published: false,
          answerInputFocused: false,
          activeCard: {
             question: '',
@@ -102,6 +103,7 @@ export default {
       submitDeck() {
          this.deck['cards'] = this.cards
          this.$store.dispatch('createDeck', this.deck)
+         this.published = true
       }
    },
    components: {
