@@ -8,4 +8,10 @@
 .action {
   cursor: pointer;
 }
+.h60 {
+   height: 60vh;
+}
+input:focus {
+  outline: none;
+}
 </style>
