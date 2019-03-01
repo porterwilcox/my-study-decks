@@ -1,7 +1,7 @@
 <template>
    <div class="study container-fluid">
        <navigation></navigation>
-      {{deck}}
+       {{deck}}
    </div>
 </template>
 
@@ -11,7 +11,10 @@ export default {
    name: "study",
    props: [],
    data() {
-      return {}
+      return {
+          correct: [],
+          wrong: []
+      }
    },
    computed: {
        deck() {

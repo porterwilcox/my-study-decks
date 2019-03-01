@@ -44,10 +44,13 @@ let router = new Router({
 
 let publicRoutes = ["home", "about", "study"]
 
+let signedIn = () => _auth.currentUser != undefined
+
+//binary signedIn?
 router.beforeEach((to, from, next) => {
   if (!publicRoutes.includes(to.name)) {
-    if (!_auth.currentUser || !_auth.currentUser.emailVerified) {
-      Store.dispatch('toast', {title: "Unauthorized", text: !_auth.currentUser ? "Please, Sign In or Sign Up." : "Please, Verify your Email Address.", type: 'error', timer: 2000})
+    if (!signedIn() || !_auth.currentUser.emailVerified) {
+      Store.dispatch('toast', {title: "Unauthorized", text: !signedIn() ? "Please, Sign In or Sign Up." : "Please, Verify your Email Address.", type: 'error', timer: 2000})
       if(!publicRoutes.includes(from.name)) {
         return router.push({name: 'home'})
       }

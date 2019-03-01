@@ -21,7 +21,8 @@ SwalConfigs['confirm'] = (title, text, type, confirmButtonText = 'Ok', cancelBut
         type,
         showCancelButton: true,
         confirmButtonText,
-        cancelButtonText
+        cancelButtonText,
+        allowOutsideClick: false
     }).then(res => res.value)
 }
 
