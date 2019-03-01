@@ -2,20 +2,20 @@ import Vue from 'vue'
 import Vuex from 'vuex'
 import SwalConfigs from '../utils/swal-configs.js'
 import auth from './modules/auth.js'
-import decks from './modules/decks.js'
+import studyDecks from './modules/decks.js'
 
 Vue.use(Vuex)
 
 export default new Vuex.Store({
   modules: {
     auth,
-    decks
+    studyDecks
   },
   state: {
     decks: []
   },
   mutations: {
-    ...decks.mutations
+    ...studyDecks.mutations
   },
   actions: {
     toast({ }, payload) {

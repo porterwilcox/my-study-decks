@@ -1,17 +1,17 @@
 <template>
    <div class="navigation row mb-4">
-      <div class="col text-center">
-          <h1>My Study Decks</h1>
+      <div class="col d-flex justify-content-center">
+          <h1 style="width: fit-content" :class="{action: this.$route.name != 'home'}" @click="$router.push({name: 'home'})">My Study Decks</h1>
       </div>
       <i @click="navCount++" :class="navCount % 2 ? 'far fa-times-circle text-white' : 'fas fa-bars text-primary'" class="fa-2x side-nav-btn action" aria-label="toggle menu" data-target=".side-nav" data-toggle="collapse"></i>
       <div class="side-nav col-5 col-md-2 bg-main-color collapse">
          <div class="d-flex flex-column h-100 w-100">
-            <button v-for="l in links" :key="l.name" :class="$route.name == l.routeName ? 'disabled btn-primary' : 'btn-outline-primary'" class="btn mb-1" @click="$router.push({name: l.routeName})">{{l.name}}</button>
+            <button v-for="l in links" :key="l.name" :class="$route.name == l.routeName ? 'disabled btn-light' : 'btn-outline-light'" class="btn mb-1" @click="$router.push({name: l.routeName})">{{l.name}}</button>
             <div v-if="!user.uid" class="btn-group btn-group-sm" role="group">
-               <button @click="login" class="btn btn-outline-primary">Sign In</button>
-               <button @click="register" class="btn btn-outline-primary">Sign Up</button>
+               <button @click="login" class="btn btn-outline-light">Sign In</button>
+               <button @click="register" class="btn btn-outline-light">Sign Up</button>
             </div>
-            <button v-else @click="logout" class="btn btn-outline-primary">Logout</button>
+            <button v-else @click="logout" class="btn btn-outline-light">Logout</button>
          </div>
       </div>
    </div>
@@ -21,6 +21,13 @@
 import Swal from 'sweetalert2'
 export default {
    name: "navigation",
+   mounted() {
+      if(this.$route.name == 'study') {
+         let deck = this.$store.state.decks.find(d => d.id.substring(7,13) == this.$route.params.deckId)
+         let name = deck ? deck.name : "Study Mode"
+         this.links.unshift({name, routeName: "study"})
+      }
+   },
    props: [],
    data() {
       return {
@@ -72,13 +79,15 @@ export default {
          {
             title: 'Sign Up',
             html: 
-            '<input id="pw1" autofocus class="swal2-input" type="password" pattern=".{8,}" placeholder="Enter a password">' +
+            '<input id="pw1" autofocus class="swal2-input" type="password" placeholder="Enter a password">' +
             '<input id="pw2" class="swal2-input" type="password" placeholder="Confirm password">',
-            preConfirm: (password) => {
-               if (document.getElementById('pw1').value != document.getElementById('pw2').value) {
+            preConfirm: () => {
+               let password = document.getElementById('pw1').value
+               if (password != document.getElementById('pw2').value) {
                   return Swal.showValidationMessage("Passwords don't match.")
                }
-               this.creds.password = document.getElementById('pw1').value
+               if (password.length < 8) return Swal.showValidationMessage("Password must be at least 8 characters.")
+               this.creds.password = password
                return this.$store.dispatch('auth/register', this.creds)
                   .then(() => {
                      $('.collapse').collapse('hide');
@@ -136,7 +145,7 @@ export default {
 
 <style>
 .navigation {
-   box-shadow: inset 0 -1px 60px var(--info), 0 -2px 10px 1px black;
+   box-shadow: 0 -2px 10px 1px black;
 }
 .side-nav-btn {
     position: fixed;
@@ -152,6 +161,6 @@ export default {
     box-shadow: 0 0 100px 10px black;
     padding-top: 20vh;
     height: 100vh;
-    background: var(--info);
+    background: var(--primary);
 }
 </style>

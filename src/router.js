@@ -28,11 +28,21 @@ let router = new Router({
       component: function () { 
         return import('./views/Create.vue')
       }
+    },
+    {
+      path: '/study/deck:deckId',
+      name: 'study',
+      component: function () { 
+        return import('./views/Study.vue')
+      }
     }
   ]
 })
 
-let publicRoutes = ["home", "about"]
+// TODO
+// smart handling of private/public route, study, based on deck prop, specifically when accessing from third party site
+
+let publicRoutes = ["home", "about", "study"]
 
 router.beforeEach((to, from, next) => {
   if (!publicRoutes.includes(to.name)) {

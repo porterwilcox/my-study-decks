@@ -13,7 +13,7 @@ _auth.onAuthStateChanged(user => {
   new Vue({
     router,
     store,
-    mounted() {
+    created() {
       this.$store.dispatch('auth/setUser', user)
       this.$store.dispatch('getDecks')
     },
