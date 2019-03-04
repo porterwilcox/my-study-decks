@@ -21,22 +21,7 @@
 import Swal from 'sweetalert2'
 export default {
    name: "navigation",
-   mounted() {
-      if(this.$route.name == 'study') {
-         if (!this.user.uid) {
-            return this.$store.dispatch('confirm', {title: 'Welcome to My Study Decks.', text: 'You\'ve reached a private route. Login to continue.', type: 'warning', confirm: 'Login/Register', cancel: 'Visit Homepage'})
-               .then(signIn => {
-                  if(!signIn) return this.$router.push({name: 'home'})
-                  this.$store.dispatch('confirm', {confirm: 'Sign In to an existing account.', cancel: 'Sign Up for a new account.'})
-                     .then(signIn => signIn ? this.login() : this.register())
-               })
-            }
-         let deck = this.$store.state.decks.find(d => d.id.substring(7,13) == this.$route.params.deckId)
-         let name = deck ? deck.name : "Study Mode"
-         this.links.unshift({name, routeName: "study"})
-      }
-   },
-   props: [],
+   props: ["study"],
    data() {
       return {
          creds: {
@@ -147,7 +132,15 @@ export default {
          this.$store.dispatch('auth/logout')
       }
    },
-   components: {}
+   components: {},
+   watch: {
+      study: {
+         immediate: true,
+         handler: function (val) {
+            if (val) this.links.unshift({name: this.study, routeName: "study"})
+         }
+      }
+   }
 }
 </script>
 

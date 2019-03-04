@@ -1,6 +1,6 @@
 <template>
    <div class="study container-fluid">
-       <navigation></navigation>
+       <navigation :study="deck.name"></navigation>
        {{deck}}
    </div>
 </template>
@@ -19,7 +19,7 @@ export default {
    computed: {
        deck() {
            let id = this.$route.params.deckId
-           return this.$store.state.decks.find(d => d.id.substring(7,13) == id)
+           return this.$store.state.decks.find(d => d.id.substring(7,13) == id) || {}
        }
    },
    methods: {},
