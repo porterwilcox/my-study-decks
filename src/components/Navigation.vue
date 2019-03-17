@@ -136,8 +136,13 @@ export default {
    watch: {
       study: {
          immediate: true,
-         handler: function (val) {
-            if (val) this.links.unshift({name: this.study, routeName: "study"})
+         handler: function (val, old) {
+            if (val) {
+               if(this.links[0].routeName == "study") {
+                  this.links.shift()
+               }
+               this.links.unshift({name: this.study, routeName: "study"})
+            } 
          }
       }
    }

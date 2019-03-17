@@ -12,7 +12,8 @@ export default new Vuex.Store({
     studyDecks
   },
   state: {
-    decks: []
+    decks: [],
+    deckToEdit: {}
   },
   mutations: {
     ...studyDecks.mutations

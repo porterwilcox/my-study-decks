@@ -42,6 +42,22 @@ export default {
                     commit('setDecks', decks)
                 })
                 .catch(e => console.error(e))
+        },
+        deleteDeck({dispatch}, deckId) {
+            _db.doc('decks/' + deckId).delete()
+                .then(() => {
+                    dispatch('getDecks')
+                    router.push({name: 'home'})
+                    dispatch('toast', {title: 'Deleted', type: 'success'})
+                })
+        },
+        editDeck({dispatch}, deck) {
+            _db.doc("decks/" + deck.id).update(deck)
+                .then(() => {
+                    dispatch('getDecks')
+                    router.push({name: 'study', params: {deckId: deck.id.substring(7,13)}})
+                    dispatch('toast', {title: 'Successfully Updated', text: 'Changes to ' + deck.name + ' have been saved.', type: 'success'})
+                })
         }
     }
 }

@@ -3,7 +3,7 @@
         <navigation></navigation>
         <div class="row">
             <div class="col-12 col-md-6">
-               <h2>Create a Deck:</h2>
+               <h2>{{deckToEdit ? "Edit your" : "Create a"}} Deck:</h2>
                <h4>Card info:</h4>
                <div class="d-block">
                   <label>Prompt:</label>
@@ -67,7 +67,7 @@ export default {
             .then(stay => next(stay ? false : true))
       } else next()
    },
-   props: [],
+   props: ["deckToEdit"],
    data() {
       return {
          published: false,
@@ -102,12 +102,30 @@ export default {
       },
       submitDeck() {
          this.deck['cards'] = this.cards
-         this.$store.dispatch('createDeck', this.deck)
+         if (!this.deckToEdit) {
+            this.$store.dispatch('createDeck', this.deck)
+         } else {
+            let updated = {...this.deckToEdit, ...this.deck}
+            this.$store.dispatch('editDeck', updated)
+         }
          this.published = true
       }
    },
    components: {
        Navigation
+   },
+   watch: {
+      deckToEdit: {
+         immediate: true,
+         handler: function(deck) {
+            if (deck) {
+               let {name, private: p, cards} = deck
+               this.deck.name = name
+               this.deck.private = p
+               this.cards = cards.map(c => {return {...c}})
+            }
+         }
+      }
    }
 }
 </script>

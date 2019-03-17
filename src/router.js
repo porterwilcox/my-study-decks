@@ -25,6 +25,7 @@ let router = new Router({
     {
       path: '/create',
       name: 'create',
+      props: true,
       component: function () { 
         return import('./views/Create.vue')
       }
