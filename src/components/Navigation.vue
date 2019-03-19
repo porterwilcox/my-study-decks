@@ -7,6 +7,7 @@
       <div class="side-nav col-5 col-md-2 bg-main-color collapse">
          <div class="d-flex flex-column h-100 w-100">
             <button v-for="l in links" :key="l.name" :class="$route.name == l.routeName ? 'disabled btn-light' : 'btn-outline-light'" class="btn mb-1" @click="$router.push({name: l.routeName})">{{l.name}}</button>
+            <slot></slot>
             <div v-if="!user.uid" class="btn-group btn-group-sm" role="group">
                <button @click="login" class="btn btn-outline-light">Sign In</button>
                <button @click="register" class="btn btn-outline-light">Sign Up</button>
