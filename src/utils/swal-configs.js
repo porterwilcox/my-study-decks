@@ -2,7 +2,7 @@ import Swal from "sweetalert2";
 
 let SwalConfigs = {}
 
-SwalConfigs['toast'] = (title, text, type, timer = 1500) => {
+SwalConfigs['toast'] = (title, text, type = 'success', timer = 1500) => {
     return Swal.fire({
         title,
         text,

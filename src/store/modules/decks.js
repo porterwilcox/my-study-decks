@@ -11,6 +11,9 @@ export default {
         },
         addDeck(state, deck) {
             state.decks.unshift(deck)
+        },
+        results(state, data) {
+            state.results = data
         }
     },
     actions: {
@@ -30,7 +33,6 @@ export default {
                 .catch(e => console.error(e))
         },
         getDecks({commit}) {
-            console.log('getting the decks')
             _db.collection('decks').get()
                 .then(snapShot => {
                     let decks = []
@@ -58,6 +60,25 @@ export default {
                     router.push({name: 'study', params: {deckId: deck.id.substring(7,13)}})
                     dispatch('toast', {title: 'Successfully Updated', text: 'Changes to ' + deck.name + ' have been saved.', type: 'success'})
                 })
+        },
+        saveStudyResult({dispatch}, payload) {
+            if (!_auth.currentUser) return
+            _db.collection('studyResults').add({userId: _auth.currentUser.uid, ...payload})
+                .then(() => dispatch('toast', {text: 'study results saved'}))
+        },
+        getStudyResults({commit}, deckId) {
+            if (!_auth.currentUser) return
+            _db.collection('studyResults').where('userId', '==', _auth.currentUser.uid).where('deckId', '==', deckId).get()
+                .then(snapShot => {
+                    let results = []
+                    snapShot.forEach(docRef => {
+                        let result = docRef.data()
+                        result['id'] = docRef.id
+                        results.push(result)
+                    })
+                    commit('results', results)
+                })
+                .catch(e => console.error(e))
         }
     }
 }

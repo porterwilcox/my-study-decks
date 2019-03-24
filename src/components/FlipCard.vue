@@ -1,15 +1,19 @@
 <template>
-    <div tabindex="1" class="flip-card col-10 col-md-7">
+    <div tabindex="1" class="flip-card">
         <div class="fc-inner card d-flex justify-content-center align-items-center">
             <div class="fc-front text-center">
-                <h1>{{card.question}}</h1>
+                <slot name="front">
+                    <h1>{{card.question}}</h1>
+                </slot>
             </div>
             <div class="fc-back text-center">
-                <h1>{{card.answer}}</h1>
-                <div class="btn-group btn-group-md" role="group">
-                    <button @click="status('wrong')" class="btn btn-outline-secondary">Wrong</button>
-                    <button @click="status('correct')" class="btn btn-outline-secondary">Correct</button>
-                </div>
+                <slot name="back">
+                    <h1>{{card.answer}}</h1>
+                    <div class="btn-group btn-group-md" role="group">
+                        <button @click="status('wrong')" class="btn btn-outline-secondary">Wrong</button>
+                        <button @click="status('correct')" class="btn btn-outline-secondary">Correct</button>
+                    </div>
+                </slot>
             </div>
         </div>
     </div>
