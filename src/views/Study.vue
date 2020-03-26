@@ -12,7 +12,7 @@
            </div>
        </div>
        <div class="row justify-content-center align-items-center">
-            <flip-card class="col-10 col-md-6 text-center" v-on:status="processStatus" :card="activeCard">
+            <flip-card v-if="activeCard.question" class="col-10 col-md-6 text-center" v-on:status="processStatus" :card="activeCard">
                 <template v-if="finished" #front>
                     <h1>You got {{percent}}% correct!</h1>
                 </template>
@@ -72,7 +72,7 @@ export default {
        },
        finished() { //TODO - this isn't running more than just on component mount!
             let over = this.correct.size + this.wrong.size == this.deck.cards.length && this.deck.cards.length != 0
-            if (over) this.setResult()
+            if (over) setTimeout(this.setResult, 250)
             return over
        }
    },
@@ -90,10 +90,8 @@ export default {
             let index = this.deck.cards.indexOf(this.activeCard)
             this.studied.add(index)
             let next = this.calcNext(index)
-            if (!next) {
-                return 
-            }
-            this.activeCard = next
+            this.activeCard = {}
+            setTimeout(() => { this.activeCard = next ? next : { question: true } }, 250)
        },
        calcNext(index) {
            for(let i = 0; i < this.deck.cards.length; i++) {

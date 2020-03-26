@@ -13,7 +13,7 @@
       </div>
       <div class="m-5">
          <h3 class="d-inline">WAS</h3>
-         <p class="d-inline text-secondary"> built with the Vue.js frontend framework and Google's Firebase for user authentication and data storage. View the source code <a href="https://github.com/porterwilcox/my-study-decks" target="_blank">here</a>.</p>
+         <p class="d-inline text-secondary"> built with the Vue.js frontend framework and Google's Firebase for hosting, and "serverless" user authentication and data storage. View the source code <a href="https://github.com/porterwilcox/my-study-decks" target="_blank">here</a>.</p>
       </div>
    </div>
 </template>
