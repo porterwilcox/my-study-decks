@@ -12,6 +12,7 @@
     "@firebase/firestore": "^1.0.4",
     "firebase-app": "0.0.1",
     "firebase-auth": "^0.1.2",
+    "lodash": "^4.17.15",
     "register-service-worker": "^1.5.2",
     "sweetalert2": "^8.2.4",
     "vue": "^2.6.6",

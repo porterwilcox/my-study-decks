@@ -1,7 +1,7 @@
 <template>
    <div class="navigation row mb-4">
       <div class="col d-flex justify-content-center">
-          <h1 style="width: fit-content" :class="{action: this.$route.name != 'home'}" @click="$router.push({name: 'home'})">My Study Decks</h1>
+          <h1 class="capitalized">{{route}}</h1>
       </div>
       <i @click="navCount++" :class="navCount % 2 ? 'far fa-times-circle text-white' : 'fas fa-bars text-primary'" class="fa-2x side-nav-btn action" aria-label="toggle menu" data-target=".side-nav" data-toggle="collapse"></i>
       <div class="side-nav col-5 col-md-2 bg-main-color collapse">
@@ -39,6 +39,10 @@ export default {
    computed: {
       user() {
          return this.$store.getters.User
+      },
+      route() {
+         let t = this.$route.name
+         return t == 'home' ? 'my study decks' : t
       }
    },
    methods: {

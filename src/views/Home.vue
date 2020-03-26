@@ -1,6 +1,6 @@
 <template>
   <div class="home container-fluid">
-    <navigation></navigation>
+    <navigation />
     <div class="row">
       <div class="col-12 col-md-10 offset-md-1">
         <div class="row">

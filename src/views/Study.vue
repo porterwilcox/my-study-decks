@@ -7,7 +7,7 @@
             </div>
        </navigation>
        <div class="row my-4">
-           <div v-for="(card, i) in deck.cards" class="col d-flex justify-content-center">
+           <div :key="i" v-for="(card, i) in deck.cards" class="col d-flex justify-content-center">
                <p @click="jumpToCard(card)" :class="{'active': card == activeCard, 'green': correct.has(card), 'red': wrong.has(card)}" class="circle action">{{i+1}}</p>
            </div>
        </div>
@@ -70,7 +70,7 @@ export default {
        user() {
            return this.$store.getters.User
        },
-       finished() { //todo this isn't running more than just on component mount!
+       finished() { //TODO - this isn't running more than just on component mount!
             let over = this.correct.size + this.wrong.size == this.deck.cards.length && this.deck.cards.length != 0
             if (over) this.setResult()
             return over

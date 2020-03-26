@@ -14,4 +14,7 @@
 input:focus {
   outline: none;
 }
+.capitalized {
+  text-transform: capitalize;
+}
 </style>
